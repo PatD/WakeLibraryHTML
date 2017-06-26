@@ -9,7 +9,7 @@
 	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
 
 		<style>
-			#contentHolder{min-height:900px;}
+			#contentHolder{min-height:400px;}
 		</style>
 
       <!--Let browser know website is optimized for mobile-->
@@ -18,29 +18,112 @@
 
     <body>
     	
-<div class="navbar-fixed">	
-  <nav>
-    <div class="nav-wrapper">
-      <a href="/" class="brand-logo" data-navigo>WakeLib</a>
-      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
-      <ul class="right hide-on-med-and-down">
-        <li><a href="sass.html">Sass</a></li>
-        <li><a href="badges.html">Components</a></li>
-        <li><a href="collapsible.html">Javascript</a></li>
-        <li><a href="mobile.html">Mobile</a></li>
-      </ul>
-      <ul class="side-nav" id="mobile-demo">
-        <li><a href="sass.html">Sass</a></li>
-        <li><a href="badges.html">Components</a></li>
-        <li><a href="collapsible.html">Javascript</a></li>
-        <li><a href="mobile.html">Mobile</a></li>
-      </ul>
-    </div>
-  </nav>
-</div>	
+	  <nav>
+	    <div class="nav-wrapper">
+	      <a href="/index.html" class="brand-logo left" data-navigo>WakeCoLib</a>
+	      <ul id="nav-mobile" class="right">
+	        <li><a href="/ask/default.html" data-navigo>Ask</a></li>
+	        <li><a href="/events/" data-navigo>Events</a></li>
+	      </ul>
+	    </div>
+	  </nav>
+
+
+
+	<main id="barba-wrapper">
+		<div class="barba-container container" data-namespace="homescreen">
+		
+		<div id="homeScreenHolder"></div>
+
+
+
+	  	<select id="libraryListNotFav" class="inp3ut-field col s12"></select>
+  	    <label>Choose a new library</label>
+
+
+		<a class="waves-effect waves-light btn" href="/locations/default.html"><i class="material-icons right">store</i>See All Branches</a>
+
+
+		</div>
+	</main>
+
+
+
+
+
+
     	
-    <div class="container" id="bookSearchHolder">
+	
+	
+	
+	
+	
+	
+	
+	<br />
+
+
+  	
+
     	
+    	
+    	
+    	
+    
+        <footer class="page-footer">
+          <div class="container">
+            <div class="row">
+              <div class="col l6 s12">
+                <h5 class="white-text">Footer Content</h5>
+                <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
+              </div>
+              <div class="col l4 offset-l2 s12">
+                <h5 class="white-text">Links</h5>
+                <ul>
+                  <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
+                  <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
+                  <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
+                  <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="footer-copyright">
+            <div class="container">
+            © 2014 Copyright Text
+            <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+            </div>
+          </div>
+        </footer>	
+   
+   
+  
+  
+  
+  
+  
+  
+  
+<!-- Seach button -->  
+<div class="fixed-action-btn">
+	<a href="#searchModal" class="btn-floating btn-large waves-effect waves-light green">
+	  <i class="large material-icons">search</i>
+	</a>
+</div> 
+   
+   
+   
+   
+   
+   
+   
+   
+   
+<!-- Booksearch Modal -->
+  
+<div id="searchModal" class="modal bottom-sheet">
+    <div class="modal-content" id="bookSearchHolder">
+    	 <h5>Search Card Catalog</h5> 	
     		
         <div class="input-field col s6">
           <input id="bookSearchinput" type="text" class="validate">
@@ -77,144 +160,29 @@
 		  </div>
         
         
-            <button id="bookSearchSubmit" class="btn waves-effect waves-light" type="submit" name="action">Search
-		    <i class="material-icons right">search</i>
-		  </button>
         
         
         <div id="bookSearchResults">
         	
-        </div>
-    	
-    </div>
-    	
-    	
-    	
-    	
-    	
-    	
-	<div class="container" id="contentHolder">
-	
-	
-		<!-- div class="progress">
-			<div class="indeterminate"></div>
-		</div -->
-	
-	
-<!--
-	
-	<div CODE>ERL</div>
-
-	<p>My Favorite [x]</p>
-
-	<h2 NAME>East Regional Library</h2>
-	<img CODE src="locphotos/erl.png" />
-	<p FAC_ADDRESS>946 Steeple Square Road</p>
-	<p CITY>Knightdale, NC</p>
-	<div PHONE><p>919-123-4567</p></div>
-	
-	
-
-
-
-	<ul id="tabs-swipe" class="tabs">
-		<li class="tab col s3"><a class="active" href="#swipe-1">Events</a></li>
-		<li class="tab col s3"><a href="#swipe-2">Location</a></li>
-		<li class="tab col s3"><a href="#swipe-3">Hours</a></li>
-	</ul>
-  
-	<div id="swipe-1" class="col s12">
-		<h4>Events</h4>
-		<i>
-		Parse with http://www.trumba.com/calendars/WCPL.rss?search=East+Regional+library
-		
-		http://www.trumba.com/calendars/WCPL.rss?search=Cary+Community+Library&previousweeks=0&HTML=0&weeks=5
-		
-		
-		
-		http://askwcpl.wakegov.com/api_answers.php?iid=294&type=popular&limit=500&showans=0&showdet=0&format=json
-		http://askwcpl.wakegov.com/api_qa.php?iid=294&qid=54540&format=json
-		
-		</i>
-		
-		
-	</div>
-	<div id="swipe-2" class="col s12">
-		<h4>Location</h4>
-		streetview and buttons https://developers.google.com/maps/documentation/javascript/examples/streetview-embed
-		
-		"geometry": {
-            "x": -78.48715576749532,
-            "y": 35.80282433219524
-         }
-		
-	</div>
-	<div id="swipe-3" class="col s12">
-	  <table>
-		<thead>
-			<tr><th>Day</th><th>Hours</th></tr>
-		</thead>
-		<tbody>
-			<tr><td>Mon-Thur</td>	<td M_T>10 a.m.–6 p.m.</td></tr>
-			<tr><td>Friday</td>		<td Fri>10 a.m.–6 p.m.</td></tr>
-			<tr><td>Saturday</td>	<td Sat>10 a.m.–6 p.m.</td></tr>
-			<tr><td>Sunday</td>		<td Sun>10 a.m.–6 p.m.</td></tr>
-		</tbody>
-	</table>
-	  
-	</div>
+        </div>   	
+ 
+ 
+ 
+    
+    
+    <div class="modal-footer">
+      
+         <button id="bookSearchSubmit" class="btn waves-effect waves-light" type="submit" name="action">Search
+		    <i class="material-icons right">search</i>
+		  </button>
         
--->
-	
-            
-         
-    
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	</div>
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    
-        <footer class="page-footer">
-          <div class="container">
-            <div class="row">
-              <div class="col l6 s12">
-                <h5 class="white-text">Footer Content</h5>
-                <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
-              </div>
-              <div class="col l4 offset-l2 s12">
-                <h5 class="white-text">Links</h5>
-                <ul>
-                  <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
-                  <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
-                  <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
-                  <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="footer-copyright">
-            <div class="container">
-            © 2014 Copyright Text
-            <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
-            </div>
-          </div>
-        </footer>	
+      
+    </div>
+  </div>
+   
+  </div>
+   
+   
     	
     	
     	
@@ -225,13 +193,39 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 <!-- Compiled and minified JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
-<script src="scripts/navigo.js"></script>
+<!-- script src="scripts/navigo.js"></script -->
+
+
+<script src="scripts/barba.js"></script>
 <script src="scripts/progLibrary.js"></script>
 
   <script>
   	$(document).ready(function() {
     $('select').material_select();
+ 
 });
+
+
+ $(document).ready(function(){
+    // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
+	$('.modal').modal({
+	      dismissible: true, // Modal can be dismissed by clicking outside of the modal
+	      opacity: .5, // Opacity of modal background
+	      inDuration: 300, // Transition in duration
+	      outDuration: 200, // Transition out duration
+	      startingTop: '4%', // Starting top style attribute
+	      endingTop: '10%', // Ending top style attribute
+	      ready: function(modal, trigger) { // Callback for Modal open. Modal and trigger parameters available.
+	       console.log("Modal open"); 
+	       console.log(modal, trigger);
+	      },
+	      complete: function() { 
+	      	console.log("modal closed");
+	      } // Callback for Modal close
+	    }
+	  );
+	      
+	  });
   </script>
   
   

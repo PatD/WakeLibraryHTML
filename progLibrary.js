@@ -1,8 +1,7 @@
 // Going to load each time rather than relying on cache.  Only do cache stuff it if's supported
 if('caches' in window) {
   console.log("Cache supported");
-};
-
+}
 
 
 
@@ -11,9 +10,11 @@ if('caches' in window) {
 // Services processing
 const servicesJSONurl = 'http://aftervictory.com/domparse/';
 
-  
 // Div that holds content
-const contentHolder = document.getElementById("contentHolder");
+const contentHolder = document.getElementById("homeScreenHolder");
+
+const askWakeQuestionHolder = document.getElementById("askWakeQuestionHolder");
+
   
 // REST Endpoints
 const libraryLocations = 'https://services1.arcgis.com/a7CWfuGP5ZnLYE7I/arcgis/rest/services/Libraries/FeatureServer/0/query?where=1%3D1&outFields=*&orderByFields=NAME&outSR=4326&f=json';
@@ -48,6 +49,7 @@ let clearContainer = function(){
 	while (contentHolder.hasChildNodes()){
 		contentHolder.removeChild(contentHolder.firstChild);
 	}
+
 };
 
  
@@ -130,8 +132,8 @@ let loadEventsLibrarySingleDay = function(searchTerms,eventDate){
   
 // Event Listener for Location cards
 let setLibraryListEventListner = function(){
- 	
- 	// Each View Library button in a ndoelist
+ 	/*
+ 	// Plane old html buttons mean no event listener needed
  	var _locationViewButton = document.querySelectorAll(".viewLibraryButton");
  
  	[].forEach.call(_locationViewButton, function (item) {
@@ -141,14 +143,29 @@ let setLibraryListEventListner = function(){
   		});
   
 	});	
- 
+ */
  	// Each Make Favorite button in a ndoelist
  	var _makeFavoriteButton = document.querySelectorAll(".makeFavoriteButton");
 
- 	[].forEach.call(_makeFavoriteButton, function (item) {
+ 	[].forEach.call(_makeFavoriteButton, function(item) {
 
+		var _myFavoriteLibrary = item.getAttribute("data-favorite");
+
+		// Adds library location to localStorage as favorite.
+		// If one is already in place, shows replaces it
   		item.addEventListener("click", function(){
-  			console.log(this);
+  			
+  			// Sets this clicked location as favorite
+  			localStorage.setItem("myFavoriteLibrary",_myFavoriteLibrary);
+  			
+  			
+  			// now we call clearContainer?
+  			
+  			// Need to retrieve value on loaded
+  			
+  			// update icon 
+  			
+  			
   		});
   
 	});	
@@ -158,14 +175,16 @@ let setLibraryListEventListner = function(){
  
   
 // Event Listner for AskWCPL questions.
+/*
 let setLibraryQuestionsEventListner = function(){
  	
  	// Each question is loaded into a nodelist
  	var _askWCPLquestionLink = document.querySelectorAll("[data-question]");
  
+ 
  	// Which we treat as an array, and loop through
  	[].forEach.call(_askWCPLquestionLink, function (item) {
-
+	
   		item.addEventListener("click", function(){
   		
   			var _questionID = this.getAttribute("data-question");
@@ -179,13 +198,10 @@ let setLibraryQuestionsEventListner = function(){
 	});		// Looping through questions
  	
  }; 		//setLibraryQuestionsEventListner
-
+*/
   
 // loads individual AskWCPL answer 
 let loadAskWCPLanswer = function(questionID){
-	
-	// clears container div
-	clearContainer();
 	
 	let _askWCPLurl = servicesJSONurl + 'example_extract_html.php?iid=294&format=json&qid='+ questionID;
 	
@@ -199,13 +215,18 @@ let loadAskWCPLanswer = function(questionID){
 	}).then(function(returnedloadAskWCPL) {
 		
 		var _returned = returnedloadAskWCPL.answer;
-		console.log(_returned);
+		// console.log(_returned);
 		
 			let askHTML = `
-                <h5>${_returned.question}</h5>
-                <p>${_returned.answer}</p>
-                <em>${_returned.updated}</em>
-
+			<div class="row">
+		      <div class="col s12">
+		        <div class="card-panel flow-text">
+		                <h5>${_returned.question}</h5>
+		                <p>${_returned.answer}</p>
+		                <p><em>${_returned.updated}</em></p>
+		        </div>
+		      </div>
+		    </div>
             `;
 	
 			
@@ -223,9 +244,13 @@ let loadAskWCPLanswer = function(questionID){
 // Loads all askWCPL Questions
 let loadAskWCPLquestions = function(){
 	
-	// clears container div
-	clearContainer();
+	// Where questions will land
+	let _askWakeQuestionHolder = document.getElementById("askWakeQuestionHolder");
+	let _askWakeQuestionCollection = document.getElementById("askWakeQuestionCollection");
 	
+
+	
+	// where we get our question list form
 	let _askWCPLquestionurl = servicesJSONurl + 'wakelib-askwcpl-questions.php?iid=294&type=popular&limit=500&showans=0&showdet=1&format=json';
 	
 	fetch(_askWCPLquestionurl).then(function(response) { 
@@ -235,43 +260,36 @@ let loadAskWCPLquestions = function(){
 		
 		// store locally now?
 		
-	}).then(function(returnedloadAskWCPL) {
+		}).then(function(returnedloadAskWCPL) {
 		
-		var _returned = returnedloadAskWCPL.answers;
-		console.log(_returned);
-		
-		for (let _question of returnedloadAskWCPL.answers){
+			var _returned = returnedloadAskWCPL.answers;
+			// console.log(_returned);
 			
-			// console.log(_question.question);
+			for (let _question of returnedloadAskWCPL.answers){
+				
+				// console.log(_question.question);
+				
+				let _questionsHTML = `
+					<a class="collection-item" data-question="${_question.id}" href="/ask/${_question.id}">${_question.question}</a>
+	            `;
+		
+			// Place each question in container div
+			_askWakeQuestionCollection.insertAdjacentHTML( 'beforeend', _questionsHTML );
 			
-			let _questionsHTML = `
-				<h5 data-question="${_question.id}">${_question.question}<br><em>${_question.details}</em></h5>
-            `;
-	
-
-		contentHolder.insertAdjacentHTML( 'beforeend', _questionsHTML );
-		};
+			};
 	
 	
+		}).then(function(){
 		
-	}).then(function(){
+			// Sets event listeners
+			// setLibraryQuestionsEventListner();
+			
 		
-		// Sets event listeners
-		setLibraryQuestionsEventListner();
-		
-		// Starts routing 	
-		// router.updatePageLinks();
-		
-		
-	}).catch(function(err) {
-		console.log('There has been an error loading this question');
+		}).catch(function(err) {
+			console.log('There has been an error loading this question');
 		
 	});
-		
-	
-	
-	
-	
+
 };
 
 
@@ -283,18 +301,33 @@ let loadAskWCPLquestions = function(){
 // Perform a general search
 	// Autosuggest http://aftervictory.com/domparse/wakelib-catalog-autosuggest.php?method=GetAutoSuggestList&searchTerm=turkey
 
+let bookSearch = function(){
+	bookSearchSubmit.addEventListener("click", function(){
 	// Search field
-	var bookSearchinput = document.getElementById("bookSearchinput").value;	
+	
+	let bookSearchinput = document.getElementById("bookSearchinput").value;	
 
 	// Search button
-	var bookSearchSubmit = document.getElementById("bookSearchSubmit");
+	let bookSearchSubmit = document.getElementById("bookSearchSubmit");
 
 	// dropdown filter 
-	var bookSearchLibrary = document.getElementById("bookSearchLibraries");
+	let bookSearchLibrary = document.getElementById("bookSearchLibraries");
 	
 	// http://aftervictory.com/domparse/wakelib-catalog-results.php?view=rss&lookfor=star%20wars&filter[]=available_at_catalog:%22Athens%20Drive%20Community%22
 	
+	let bookSearchURLpath = 'wakelib-catalog-results.php?view=rss&lookfor=';
+	let bookSearchURLavailability = '&filter[]=availability_toggle_catalog:';
+	let bookSearchURLlocation = '&filter[]=available_at_catalog' + bookSearchLibrary.value;
 	
+
+
+  	
+  	let bookSearchURL = servicesJSONurl + bookSearchURLpath + "'" + bookSearchinput + "'" + bookSearchURLavailability + bookSearchURLlocation;
+  	
+  	console.log(bookSearchURL)
+  });
+};
+
 
 
 // https://catalog.wakegov.com/Search/Results?view=rss&lookfor=star%20wars
@@ -305,6 +338,7 @@ let loadAskWCPLquestions = function(){
 
 
 // Details on a specific search
+	// invididual listing: http://aftervictory.com/domparse/wakelib-catalog-individualbook.php?https://catalog.wakegov.com/GroupedWork/aaff1eaf-1729-da14-d03b-cdf1b7c0c171/AJAX?method=getWorkInfo
 
 
 
@@ -315,11 +349,14 @@ let loadAskWCPLquestions = function(){
  
  
  
- // Loads an individual Library
- let loadLibraryLocation = function(libraryID){
- 	console.log("We are loading " + libraryID)
+ // Loads an individual Library Branch
+ let loadBranchLocation = function(){
+
  	
- 	loadLibraryPhoneNumber(name,city);
+ 	
+ 	
+ 	
+ //	loadBranchLocation(name,city);
  };
  
  
@@ -343,30 +380,97 @@ let loadLibraryPhoneNumber = function(name, city){
  
  
  
- 
- 
+ // Load Library Locations for Locations page 
+ let loadLocations = function(){
 
-  
- // Load Library Locations 
- let loadHomeLibraryList = function(){
-  
   	fetch(libraryLocations).then(function(response) { 
 		// Convert to JSON
 		return response.json();
 		
 		// store locally now?
 		
-	
+		}).then(function(returnedLibraryData) {
 		
-	}).then(function(returnedLibraryData) {
-	
+		
 		for (let location of returnedLibraryData.features){
 			
-			// Check and see if favorite, and show that one on top 
+		// Template literal!
 		
-			// Template literal!
 			let locationHTML = `
-				<div class="card">
+				<div class="card" data-loc="${location.attributes.CODE}">
+	              <div class="card-image">
+	                <img src="/locphotos/${location.attributes.CODE.toLowerCase()}.png">
+	                <span class="card-title">${location.attributes.BLDGDESC}</span>
+                  	<a class="btn-floating halfway-fab waves-effect waves-light blue lighten-5"><i class="material-icons">turned_in</i></a>
+	              </div>
+	              <div class="card-content">
+	                <p>${location.attributes.FAC_ADDRESS}, ${location.attributes.CITY} NC</p>
+	              </div>
+	              <div class="card-action">
+	                <a class="viewLibraryButton" href="/locations/branch.html?branch=${location.attributes.CODE}"	>View</a>
+	                <a class="makeFavoriteButton" data-favorite="${location.attributes.CODE}">Make My Branch</a>
+	              </div>
+	            </div>
+            `;
+            
+        	// Check and see if a location is a favorite, and show that one on top 
+			// if there's a fav, select it
+		
+			let _userFavoriteLibrary = localStorage.getItem("myFavoriteLibrary");
+		  		
+		  	let _locsPageLandingDiv = document.getElementById("wakeLocationsHolder");
+	  	
+			_locsPageLandingDiv.insertAdjacentHTML( 'beforeend', locationHTML );
+	
+		}  // End of loop
+		
+		
+
+	}).then(function(){
+		// Sets event listeners
+		setLibraryListEventListner();
+		
+		
+	}).catch(function(err) {
+		Materialize.toast('There has been an error loading library locations!', 4000);
+		
+		// Load local?
+	});
+ 	
+ 	
+ 	// Adds event listeners!
+ 	
+ 	
+ }; 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+  	
+ // Load Library Locations 
+ let loadHomeLibraryList = function(){
+
+  	fetch(libraryLocations).then(function(response) { 
+		// Convert to JSON
+		return response.json();
+		
+		// store locally now?
+		
+		}).then(function(returnedLibraryData) {
+		
+		
+		for (let location of returnedLibraryData.features){
+			
+		// Template literal!
+		
+			let locationHTML = `
+				<div class="card" data-loc="${location.attributes.CODE}">
 	              <div class="card-image">
 	                <img src="locphotos/${location.attributes.CODE.toLowerCase()}.png">
 	                <span class="card-title">${location.attributes.BLDGDESC}</span>
@@ -376,14 +480,45 @@ let loadLibraryPhoneNumber = function(name, city){
 	                <p>${location.attributes.FAC_ADDRESS}, ${location.attributes.CITY} NC</p>
 	              </div>
 	              <div class="card-action">
-	                <a class="viewLibraryButton" href="/location/${location.attributes.CODE}" data-navigo>View Library</a>
-	                <a class="makeFavoriteButton">Make Favorite</a>
+	                <a class="viewLibraryButton" href="/location/${location.attributes.CODE}" data-navigo>View</a>
+	                <a class="makeFavoriteButton" data-favorite="${location.attributes.CODE}">Make My Branch</a>
 	              </div>
 	            </div>
             `;
-	
+            
+        	let notFavoriteLocationHTML = `<option>${location.attributes.BLDGDESC}</option>`;
+		    
 			
-			contentHolder.insertAdjacentHTML( 'beforeend', locationHTML );
+			// Check and see if a location is a favorite, and show that one on top 
+		
+			let _userFavoriteLibrary = localStorage.getItem("myFavoriteLibrary");
+		  		
+	  		// if there's a fav, show at the top
+			if(locationHTML.indexOf('data-loc="'+ _userFavoriteLibrary +'"') >=0){
+				
+				contentHolder.insertAdjacentHTML( 'afterbegin', locationHTML );
+				
+			}	
+			
+			// There are no favorites 
+			else if(_userFavoriteLibrary === null){
+				
+				contentHolder.insertAdjacentHTML( 'beforeend', locationHTML );
+			
+		
+			// Some kind of template for not-the-favs-when-there-is-a-fav
+			} else{
+				
+				let libraryListNotFav = document.getElementById("libraryListNotFav");
+				libraryListNotFav.insertAdjacentHTML( 'beforeend', notFavoriteLocationHTML );
+				
+				$('select').material_select();
+
+			}
+			
+			
+			libraryListNotFav.insertAdjacentHTML( 'beforeend', notFavoriteLocationHTML );
+		
 			
 		}  // End of loop
 		
@@ -393,9 +528,6 @@ let loadLibraryPhoneNumber = function(name, city){
 		
 		// Sets event listeners
 		setLibraryListEventListner();
-		
-		// Starts routing 	
-		router.updatePageLinks();
 		
 		
 	}).catch(function(err) {
@@ -410,11 +542,6 @@ let loadLibraryPhoneNumber = function(name, city){
  	
  }; //loadHomeLibraryList
  
- 
- 
- 
- 
- // Load an individual library Locations
  
   
   
@@ -435,28 +562,51 @@ let loadLibraryPhoneNumber = function(name, city){
 
 
 // JS routing using Navigo.js
-
-
-
-
-var root = "http://127.0.0.1:8887/";
+/* 
+var root = "http://127.0.0.1:8887";
 var useHash = false; // Defaults to: false
 var hash = null; // Defaults to: '#'
-var router = new Navigo(root, useHash, hash);
+var libraryRouter = new Navigo(root, useHash, hash);
 
 
-
-router
+libraryRouter
 	.on(function () {
 	// Routing started
-	//	loadHomeLibraryList();
+	
+		// clearContainer();
+	
+		loadHomeLibraryList();
+	})
+	.on('ask/', function () {
+
+		console.log("Ask!");
+		
+		// clears container div
+		// clearContainer();
+
+		
+		// Loads all Questions
+		loadAskWCPLquestions();
+		
+		
+	})
+	.on('ask/:id', function (params) {
+
+		console.log(params.id);
+		
+		// clears container div
+		// clearContainer();
+
+		// Loads individual question
+		loadAskWCPLanswer(params.id);
+		
 	})
 	.on('location/:id', function (params) {
 	// display all the products
 		console.log(params.id);
 		
 		// Clears out anything
-		clearContainer();
+		// clearContainer();
 		
 		// Loads an individual location
 		loadLibraryLocation(params.id);
@@ -472,6 +622,7 @@ router
     after: function (params) {
       // after resolving
         // console.log("after" + params.id);
+        // router.updatePageLinks();
     },
     leave: function (params) {
       // when you are going out of the that route
@@ -479,9 +630,160 @@ router
   }).resolve();
   
   
-  
+ */ 
   	
+// Event listener that starts the Javascript
+window.addEventListener("load", function load(event){
+    window.removeEventListener("load", load, false); //remove listener, no longer needed
 
-  	
+		
+
+	// PJAX is best jax
+	Barba.Pjax.start();
+	
+	// Disabled for now
+	Barba.Pjax.cacheEnabled = false;
+
+	loadHomeLibraryList();
+	
+	
+	Barba.Dispatcher.on('newPageReady', function(currentStatus, oldStatus, container) {
+		console.log("page has changed")
+	});
+	
+	// Update Analytics
+	/* 
+	Barba.Dispatcher.on('initStateChange', function() {
+	  ga('send', 'pageview', location.pathname);
+	});
+	*/
+	
+	
+	
+	// homescreen Functions
+	var homescreen = Barba.BaseView.extend({
+	  namespace: 'homescreen',
+	  onEnter: function() {
+	      // The new Container is ready and attached to the DOM.
+	      console.log("onEnter");
+	  },
+	  onEnterCompleted: function() {
+	      // The Transition has just finished.
+	      
+			// Loads the list of libraries 
+			loadHomeLibraryList();
+			console.log("home");
+	      
+	  },
+	  onLeave: function() {
+	      // A new Transition toward a new page has just started.
+	  },
+	  onLeaveCompleted: function() {
+	      // The Container has just been removed from the DOM.
+	  }
+	});
+	
+	// Don't forget to init the view!
+	homescreen.init();
+	
+	
+	
+	
+	
+	
+	
+	
+
+	// AskWCPL Functions
+	var askwcpl = Barba.BaseView.extend({
+	  namespace: 'askwcpl',
+	  onEnter: function() {
+	      // The new Container is ready and attached to the DOM.
+	      console.log("onEnter");
+	  },
+	  onEnterCompleted: function() {
+	      // The Transition has just finished.
+	      
+	      loadAskWCPLquestions();
+	      
+	  },
+	  onLeave: function() {
+	      // A new Transition toward a new page has just started.
+	  },
+	  onLeaveCompleted: function() {
+	      // The Container has just been removed from the DOM.
+	  }
+	});
+	
+	// Don't forget to init the view!
+	askwcpl.init();
+	
+
+	// Locations Functions
+	var locations = Barba.BaseView.extend({
+	  namespace: 'locations',
+	  onEnter: function() {
+	      // The new Container is ready and attached to the DOM.
+	      console.log("onEnter");
+	       loadLocations();
+	  },
+	  onEnterCompleted: function() {
+	      // The Transition has just finished.
+	      
+	     
+	      
+	  },
+	  onLeave: function() {
+	      // A new Transition toward a new page has just started.
+	  },
+	  onLeaveCompleted: function() {
+	      // The Container has just been removed from the DOM.
+	  }
+	});
+	
+	// Don't forget to init the view!
+	locations.init();
+
+
+
+
+
+	// Locations Functions
+	var branch = Barba.BaseView.extend({
+	  namespace: 'branch',
+	  onEnter: function() {
+	      // The new Container is ready and attached to the DOM.
+	      console.log("onEnter");
+	      
+	      loadBranchLocation();
+	      
+	  },
+	  onEnterCompleted: function() {
+	      // The Transition has just finished.
+	      
+	     
+	      
+	  },
+	  onLeave: function() {
+	      // A new Transition toward a new page has just started.
+	  },
+	  onLeaveCompleted: function() {
+	      // The Container has just been removed from the DOM.
+	  }
+	});
+	
+	// Don't forget to init the view!
+	branch.init();
+
+
+
+
+
+
+
+
+
+
+},false);
   	
   	
