@@ -4,6 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
+    <link rel='dns-prefetch' href='https://fonts.googleapis.com' />
+    <link rel='dns-prefetch' href='https://unpkg.com/' />
+    
     
     <title>Wake County Libraries</title>
     
@@ -37,12 +40,18 @@
 				    	.carousel{height:410px;}
       	.carousel .carousel-item {
 				width:300px !important;top:-85px;}
+				
+				
+								
+				
     </style>
  
  
   </head>
   <body>
   	
+
+      
   	
     <div class="container">
       <div id="library">
@@ -51,6 +60,8 @@
     			<nav-bar class="col s2 pull-s1"></nav-bar>
     			<div class="col s10"><h4><router-link to="/">Wake Co. Libraries</router-link></h4></div>
     		</div>
+    
+    
     
     		<router-view></router-view>
       	
@@ -76,6 +87,8 @@
     <script src="https://unpkg.com/vue"></script>
     <script src="https://unpkg.com/vuex"></script>
     <script src="https://unpkg.com/vue-router"></script>
+    
+    <script src="/finished.js"></script>
     <script src="/app.js"></script>
   </body>
 </html>
